@@ -12,9 +12,14 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.organizze.jmdevelopers.organizze.Config.ConfigFirebase;
 import com.organizze.jmdevelopers.organizze.Model.Usuario;
 import com.organizze.jmdevelopers.organizze.R;
+
+import java.nio.file.FileAlreadyExistsException;
 
 public class CadastroActivity extends AppCompatActivity {
     private EditText nome,email,senha;
@@ -61,26 +66,37 @@ public class CadastroActivity extends AppCompatActivity {
 
                     Toast.makeText(CadastroActivity.this,"Preencha o campo nome",Toast.LENGTH_LONG).show();
                 }
-
-
-
-
-
             }
 
             private void cadastrarusuario() {
                 autenticacao=ConfigFirebase.getFirebaseAutenticacao();
 
-                autenticacao.createUserWithEmailAndPassword(usuario.getEmail(),usuario.getSenha()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                autenticacao.createUserWithEmailAndPassword(usuario.getEmail(),usuario.getSenha())
+                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
                             Toast.makeText(CadastroActivity.this,"Sucesso ao cadastrar",Toast.LENGTH_LONG).show();
-
-
                         }
                         else {
-                            Toast.makeText(CadastroActivity.this,"Erro ao cadastrar",Toast.LENGTH_LONG).show();
+                            String erro="";
+                            try {
+                                // tratando execao
+                                throw task.getException()
+
+                            }catch (FirebaseAuthWeakPasswordException e){
+                                erro="Digite uma senha forte !";
+
+                            }catch (FirebaseAuthUserCollisionException e ){
+
+                                erro="o usuario ja esta cadastrado";
+                            }catch (FirebaseAuthInvalidCredentialsException e ){
+                                erro="Digite um Email valido";
+                            }catch (Exception e ){
+                                erro="erro ao cadastrar usuario "+e.getMessage();
+                                e.printStackTrace();
+                            }
+                            Toast.makeText(CadastroActivity.this,erro,Toast.LENGTH_LONG).show();
                         }
 
                     }
