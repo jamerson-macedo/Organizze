@@ -1,5 +1,6 @@
 package com.organizze.jmdevelopers.organizze.Activity;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -77,12 +78,13 @@ public class CadastroActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
                             Toast.makeText(CadastroActivity.this,"Sucesso ao cadastrar",Toast.LENGTH_LONG).show();
+                            abrirprincipal();
                         }
                         else {
                             String erro="";
                             try {
                                 // tratando execao
-                                throw task.getException()
+                                throw task.getException();
 
                             }catch (FirebaseAuthWeakPasswordException e){
                                 erro="Digite uma senha forte !";
@@ -104,5 +106,8 @@ public class CadastroActivity extends AppCompatActivity {
             }
         });
 
+    }
+    public void abrirprincipal(){
+        startActivity(new Intent(this,PrincipalActivity.class));
     }
 }
