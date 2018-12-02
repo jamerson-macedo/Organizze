@@ -1,4 +1,4 @@
-package com.organizze.jmdevelopers.organizze;
+package com.organizze.jmdevelopers.organizze.Activity;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +10,7 @@ import com.heinrichreimersoftware.materialintro.slide.FragmentSlide;
 import com.heinrichreimersoftware.materialintro.slide.SimpleSlide;
 import com.organizze.jmdevelopers.organizze.Activity.CadastroActivity;
 import com.organizze.jmdevelopers.organizze.Activity.LoginActivity;
+import com.organizze.jmdevelopers.organizze.R;
 
 public class MainActivity extends IntroActivity {
 
