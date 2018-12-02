@@ -8,6 +8,22 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="despesatheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="colorPrimary">@color/colorprimarydespesa</item>
+        <item name="colorPrimaryDark">@color/colorprimarydarkdespesa</item>
+        <item name="colorAccent">@color/coloraccentdespesa</item>
+
+    </style>
+    <style name="receitastheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="colorPrimary">@color/colorprimaryreceita</item>
+        <item name="colorPrimaryDark">@color/colorprimarydarkreceita</item>
+        <item name="colorAccent">@color/coloraccentreceita</item>
+
+    </style>
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
