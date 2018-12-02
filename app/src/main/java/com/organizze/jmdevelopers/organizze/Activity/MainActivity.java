@@ -5,21 +5,25 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.heinrichreimersoftware.materialintro.app.IntroActivity;
 import com.heinrichreimersoftware.materialintro.slide.FragmentSlide;
 import com.heinrichreimersoftware.materialintro.slide.SimpleSlide;
 import com.organizze.jmdevelopers.organizze.Activity.CadastroActivity;
 import com.organizze.jmdevelopers.organizze.Activity.LoginActivity;
+import com.organizze.jmdevelopers.organizze.Config.ConfigFirebase;
 import com.organizze.jmdevelopers.organizze.R;
 
 public class MainActivity extends IntroActivity {
-
+// vamos ver se ja tem usuario cadastreado
+    private FirebaseAuth firebaseAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_main);
         // primeiro
         // ocultar botoes
+
 
         setButtonBackVisible(false);
         setButtonNextVisible(false);
@@ -40,6 +44,24 @@ public class MainActivity extends IntroActivity {
     public void btcadastrar(View view){
         startActivity(new Intent(this,CadastroActivity.class));
 
+    }
+    public void verificarusuariologado(){
+        firebaseAuth=ConfigFirebase.getFirebaseAutenticacao();
 
+        // verifica se tem usuario
+
+        if(firebaseAuth.getCurrentUser()!=null){
+            abrirprincipal();
+        }
+
+    }
+    public void abrirprincipal(){
+        startActivity(new Intent(this,PrincipalActivity.class));
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        verificarusuariologado();
     }
 }
