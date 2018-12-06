@@ -9,11 +9,29 @@ public class Usuario {
     private String nome;
     private String email;
     private String senha;
-
+    private Double receitatotal=0.0;
+    private Double despesatotal=0.0;
 
     public Usuario() {
     }
-    // salvar no firebase
+    // salvar no firebase]
+
+    public Double getReceitatotal() {
+        return receitatotal;
+    }
+
+    public void setReceitatotal(Double receitatotal) {
+        this.receitatotal = receitatotal;
+    }
+
+    public Double getDespesatotal() {
+        return despesatotal;
+    }
+
+    public void setDespesatotal(Double despesatotal) {
+        this.despesatotal = despesatotal;
+    }
+
     public void salvar(){
         DatabaseReference firebase=ConfigFirebase.getdatabase();
         firebase.child("Usuarios").child(this.idusuario).setValue(this);
