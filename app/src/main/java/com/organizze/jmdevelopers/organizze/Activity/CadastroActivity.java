@@ -78,7 +78,7 @@ public class CadastroActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
-                                    String idusuario=Base64Custom.codificar(usuario.getEmail());
+                                    String idusuario = Base64Custom.codificar(usuario.getEmail());
                                     usuario.setIdusuario(idusuario);
                                     // salva no firebase
                                     usuario.salvar();

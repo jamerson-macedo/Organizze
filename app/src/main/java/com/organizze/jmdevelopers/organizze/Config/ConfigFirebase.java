@@ -10,7 +10,6 @@ public class ConfigFirebase {
    public static FirebaseAuth getFirebaseAutenticacao() {
        if (auth == null) {
            auth = FirebaseAuth.getInstance();
-
        }
        return auth;
    }
