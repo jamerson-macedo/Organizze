@@ -4,6 +4,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.organizze.jmdevelopers.organizze.Config.ConfigFirebase;
 import com.organizze.jmdevelopers.organizze.Helper.Base64Custom;
+import com.organizze.jmdevelopers.organizze.Helper.DateUtil;
 
 public class Movimentacao {
     private String data;
@@ -15,14 +16,14 @@ public class Movimentacao {
 
     public Movimentacao() {
     }
-    public void salvar(){
+    public void salvar(String dataescolhida){
         FirebaseAuth firebaseAuth=ConfigFirebase.getFirebaseAutenticacao();
         // pegando o usuario atual
         String idusuario= Base64Custom.codificar(firebaseAuth.getCurrentUser().getEmail());
         DatabaseReference databaseReference = ConfigFirebase.getdatabase();
         // movimentacao com um email criptografado, o mes o push id unico do firebase set value é ara salvar tudo
-
-        databaseReference.child("movimentacao").child(idusuario).child("032018").push().setValue(this);
+        String mesAno= DateUtil.removerbarra(data);
+        databaseReference.child("movimentacao").child(idusuario).child(mesAno).push().setValue(this);
 
     }
 

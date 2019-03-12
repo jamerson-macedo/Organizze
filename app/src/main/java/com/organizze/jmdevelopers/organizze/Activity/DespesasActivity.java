@@ -39,11 +39,12 @@ public class DespesasActivity extends AppCompatActivity {
     public void salvardespesa(){
         movimentacao=new Movimentacao();
         // para pegar um valor double
+        String data=campodata.getText().toString();
         movimentacao.setValor(Double.parseDouble(campovalor.getText().toString()));
         movimentacao.setCategoria(campocategoria.getText().toString());
         movimentacao.setDescricao(campodescricao.getText().toString());
-        movimentacao.setData(campodata.getText().toString());
+        movimentacao.setData(data);
         movimentacao.setTipo("d");
-        movimentacao.salvar();
+        movimentacao.salvar(data);
     }
 }
