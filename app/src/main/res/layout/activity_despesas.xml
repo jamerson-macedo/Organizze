@@ -67,7 +67,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginBottom="16dp"
         android:ems="10"
-        android:hint="Salario"
+        android:hint="Tipo"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/campodescricao"
         app:layout_constraintEnd_toEndOf="parent"
@@ -91,21 +91,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/camposalario" />
 
-    <Button
-        android:id="@+id/botaosalvardespesas"
-        android:layout_width="328dp"
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/botaosalvardespesas"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
+        android:focusable="true"
+        app:fabSize="normal"
         android:layout_marginRight="8dp"
-        android:layout_marginBottom="88dp"
-        android:hint="salvar"
+        android:layout_marginBottom="84dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/campodescricao"
-        app:layout_constraintVertical_bias="0.592" />
+        app:srcCompat="@drawable/ic_check_black_24dp" />
 
 </android.support.constraint.ConstraintLayout>

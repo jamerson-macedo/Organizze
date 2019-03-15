@@ -24,7 +24,8 @@ public class Usuario {
         this.receitatotal = receitatotal;
     }
 
-    public Double getDespesatotal() {
+    public Double getDespesatotal()
+    {
         return despesatotal;
     }
 
