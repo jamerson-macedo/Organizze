@@ -14,7 +14,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:background="@color/colorprimaryreceita"
+        android:background="@color/coloraccentreceita"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="20dp"
@@ -23,7 +23,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <EditText
-            android:id="@+id/editText"
+            android:id="@+id/Rvalor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="15dp"
@@ -39,7 +39,7 @@
     </LinearLayout>
 
     <EditText
-        android:id="@+id/campodata"
+        android:id="@+id/Rdata"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -50,7 +50,7 @@
         android:ems="10"
         android:hint="Ex: 09/12/2019"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/camposalario"
+        app:layout_constraintBottom_toTopOf="@+id/Rtipo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout"
@@ -58,7 +58,7 @@
         app:layout_constraintVertical_chainStyle="packed" />
 
     <EditText
-        android:id="@+id/camposalario"
+        android:id="@+id/Rtipo"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -67,15 +67,15 @@
         android:layout_marginRight="8dp"
         android:layout_marginBottom="16dp"
         android:ems="10"
-        android:hint="Salario"
+        android:hint="Tipo"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/campodescricao"
+        app:layout_constraintBottom_toTopOf="@+id/Rdescricao"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/campodata" />
+        app:layout_constraintTop_toBottomOf="@+id/Rdata" />
 
     <EditText
-        android:id="@+id/campodescricao"
+        android:id="@+id/Rdescricao"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -84,26 +84,28 @@
         android:layout_marginRight="8dp"
         android:layout_marginBottom="16dp"
         android:ems="10"
-        android:hint="Salario Mensal"
+        android:hint="Descrição"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/camposalario" />
+        app:layout_constraintTop_toBottomOf="@+id/Rtipo" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/floatingActionButton"
+        android:id="@+id/RfloatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginBottom="16dp"
-        android:clickable="true"
+        android:layout_marginBottom="84dp"
+        android:focusable="true"
+        app:backgroundTint="@color/colorprimaryreceita"
         app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/ic_check_black_24dp" />
 

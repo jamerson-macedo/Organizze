@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -15,7 +14,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.database.annotations.Nullable;
 import com.organizze.jmdevelopers.organizze.Config.ConfigFirebase;
 import com.organizze.jmdevelopers.organizze.Helper.Base64Custom;
 import com.organizze.jmdevelopers.organizze.Helper.DateUtil;
@@ -37,10 +35,10 @@ public class DespesasActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_despesas);
-        campodata = findViewById(R.id.campodata);
-        campodescricao = findViewById(R.id.campodescricao);
+        campodata = findViewById(R.id.Rdata);
+        campodescricao = findViewById(R.id.Rdescricao);
         campovalor = findViewById(R.id.campovalor);
-        campocategoria = findViewById(R.id.camposalario);
+        campocategoria = findViewById(R.id.Rtipo);
         // colocando uma data atual
         campodata.setText(DateUtil.dataatual());
 
@@ -76,7 +74,7 @@ public class DespesasActivity extends AppCompatActivity {
 
             Log.i("despesatotal", String.valueOf(valorecuperado));
             Double despesaatualizada = despesatotal + valorecuperado;
-            Log.i("despesatota", String.valueOf(despesatotal));
+
 
 
             atualizardespesas(despesaatualizada);
