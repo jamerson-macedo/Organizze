@@ -1,5 +1,6 @@
 package com.organizze.jmdevelopers.organizze.Activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -28,6 +30,7 @@ public class CadastroActivity extends AppCompatActivity {
     private Button botao;
     private FirebaseAuth autenticacao;
     private Usuario usuario;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,20 +40,32 @@ public class CadastroActivity extends AppCompatActivity {
         email = findViewById(R.id.email_cadastro);
         senha = findViewById(R.id.senha_cadastro);
         botao = findViewById(R.id.botao_cadastro);
+        progressDialog=new ProgressDialog(this);
+        getSupportActionBar().setTitle(("Cadastro"));
+
+
+
         // verificar se tudo foi difitado
         botao.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 String _nome = nome.getText().toString();
                 String _email = email.getText().toString();
                 String _senha = senha.getText().toString();
                 if (!_nome.isEmpty()) {
                     if (!_email.isEmpty()) {
                         if (!_senha.isEmpty()) {
+                            progressDialog.setTitle("Criando conta ");
+                            progressDialog.setMessage("Aguarde um momento");
+                            progressDialog.setCanceledOnTouchOutside(false);
+                            // aquiele chama e quando pega o dismiss ai ele para
+                            progressDialog.show();
                             usuario = new Usuario();
                             usuario.setNome(_nome);
                             usuario.setEmail(_email);
                             usuario.setSenha(_senha);
+
                             cadastrarusuario();
 
                         } else {
@@ -78,6 +93,7 @@ public class CadastroActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
+                                    progressDialog.dismiss();
                                     String idusuario = Base64Custom.codificar(usuario.getEmail());
                                     usuario.setIdusuario(idusuario);
                                     // salva no firebase
@@ -90,14 +106,18 @@ public class CadastroActivity extends AppCompatActivity {
                                         throw task.getException();
 
                                     } catch (FirebaseAuthWeakPasswordException e) {
+                                        progressDialog.dismiss();
                                         erro = "Digite uma senha forte !";
 
                                     } catch (FirebaseAuthUserCollisionException e) {
+                                        progressDialog.dismiss();
 
                                         erro = "o usuario ja esta cadastrado";
                                     } catch (FirebaseAuthInvalidCredentialsException e) {
+                                        progressDialog.dismiss();
                                         erro = "Digite um Email valido";
                                     } catch (Exception e) {
+                                        progressDialog.dismiss();
                                         erro = "erro ao cadastrar usuario " + e.getMessage();
                                         e.printStackTrace();
                                     }

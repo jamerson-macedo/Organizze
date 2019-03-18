@@ -6,6 +6,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -23,6 +25,10 @@ public class PrincipalActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth= ConfigFirebase.getFirebaseAutenticacao();
     private TextView nome,saldo;
     private MaterialCalendarView materialCalendarView;
+    private FirebaseAuth auth;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,10 +38,37 @@ public class PrincipalActivity extends AppCompatActivity {
         nome=findViewById(R.id.nome);
         saldo=findViewById(R.id.saldo);
         materialCalendarView=findViewById(R.id.calendar);
+
+        toolbar.setTitle("Organizze");
+
         configurarcalendario();
 
-
     }
+// metodo para tratar o clique no menu
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menusair:
+            auth=ConfigFirebase.getFirebaseAutenticacao();
+            auth.signOut();
+            startActivity(new Intent(this,MainActivity.class));
+            finish();
+            break;
+
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    // para adicionar o botao no toolbar
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menuprincipal,menu);
+
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
     public void adicionardespesa(View view){
         startActivity(new Intent(this,DespesasActivity.class));
 
