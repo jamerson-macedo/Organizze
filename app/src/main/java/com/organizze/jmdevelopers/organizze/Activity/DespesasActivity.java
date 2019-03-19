@@ -1,5 +1,6 @@
 package com.organizze.jmdevelopers.organizze.Activity;
 
+import android.app.PendingIntent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -79,6 +80,7 @@ public class DespesasActivity extends AppCompatActivity {
 
             atualizardespesas(despesaatualizada);
             movimentacao.salvar(data);
+            finish();
         }
 
     }

@@ -3,6 +3,7 @@ package com.organizze.jmdevelopers.organizze.Config;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.organizze.jmdevelopers.organizze.Helper.Base64Custom;
 
 public class ConfigFirebase {
     private static FirebaseAuth auth;
@@ -21,4 +22,15 @@ public class ConfigFirebase {
        return firebaseDatabase;
 
    }
+   public static DatabaseReference getidusuario(){
+
+       String idusuario = auth.getCurrentUser().getEmail();
+       // agora conveter para base 64
+       String emailconvertido = Base64Custom.codificar(idusuario);
+       DatabaseReference usuarioref = firebaseDatabase.child("Usuarios").child(emailconvertido);
+       return usuarioref;
+
+   }
+
+
 }

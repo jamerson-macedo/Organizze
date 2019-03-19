@@ -2,6 +2,7 @@ package com.organizze.jmdevelopers.organizze.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -13,7 +14,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import com.organizze.jmdevelopers.organizze.Config.ConfigFirebase;
+import com.organizze.jmdevelopers.organizze.Helper.Base64Custom;
+import com.organizze.jmdevelopers.organizze.Model.Usuario;
 import com.organizze.jmdevelopers.organizze.R;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
@@ -21,11 +28,17 @@ import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
 
 import org.w3c.dom.Text;
 
+import java.text.DecimalFormat;
+
 public class PrincipalActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth= ConfigFirebase.getFirebaseAutenticacao();
     private TextView nome,saldo;
     private MaterialCalendarView materialCalendarView;
-    private FirebaseAuth auth;
+    private FirebaseAuth auth=ConfigFirebase.getFirebaseAutenticacao();
+    private DatabaseReference firebase = ConfigFirebase.getdatabase();
+    private Double despesatotal=0.0;
+    private Double receitatotal=0.0;
+    private Double resumototal=0.0;
 
 
 
@@ -42,6 +55,38 @@ public class PrincipalActivity extends AppCompatActivity {
         toolbar.setTitle("Organizze");
 
         configurarcalendario();
+        recuperarresumo();
+
+    }
+    public void recuperarresumo(){
+        // recperar o id
+
+        String idusuario = firebaseAuth.getCurrentUser().getEmail();
+        // agora conveter para base 64
+        String emailconvertido = Base64Custom.codificar(idusuario);
+        DatabaseReference usuarioref = firebase.child("Usuarios").child(emailconvertido);
+        usuarioref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Usuario usuario=dataSnapshot.getValue(Usuario.class);
+                despesatotal=usuario.getDespesatotal();
+                receitatotal=usuario.getReceitatotal();
+                resumototal=receitatotal-despesatotal;
+                DecimalFormat decimalFormat=new DecimalFormat("0.##");
+                String resultadoformatado=decimalFormat.format(resumototal);
+                nome.setText("Olá, "+usuario.getNome());
+                saldo.setText("R$ "+resultadoformatado);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+
 
     }
 // metodo para tratar o clique no menu
@@ -49,7 +94,7 @@ public class PrincipalActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.menusair:
-            auth=ConfigFirebase.getFirebaseAutenticacao();
+
             auth.signOut();
             startActivity(new Intent(this,MainActivity.class));
             finish();
