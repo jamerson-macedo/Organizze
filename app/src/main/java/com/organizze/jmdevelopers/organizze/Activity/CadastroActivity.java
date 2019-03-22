@@ -98,7 +98,7 @@ public class CadastroActivity extends AppCompatActivity {
                                     usuario.setIdusuario(idusuario);
                                     // salva no firebase
                                     usuario.salvar();
-                                    finish();
+                                    startActivity(new Intent(CadastroActivity.this,PrincipalActivity.class));
                                 } else {
                                     String erro = "";
                                     try {

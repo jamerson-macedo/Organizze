@@ -7,6 +7,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,6 +40,9 @@ public class PrincipalActivity extends AppCompatActivity {
     private Double despesatotal=0.0;
     private Double receitatotal=0.0;
     private Double resumototal=0.0;
+    private DatabaseReference usuarioref;
+    // esse value é feito para que o firebase nao fique recuperando os usuarios mesmo com o app fechado entao ele adiciona para parar quando da o stop no app
+    private ValueEventListener valueEventListenerUsuario;
 
 
 
@@ -55,17 +59,25 @@ public class PrincipalActivity extends AppCompatActivity {
         toolbar.setTitle("Organizze");
 
         configurarcalendario();
-        recuperarresumo();
+
 
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        recuperarresumo();
+    }
+
     public void recuperarresumo(){
         // recperar o id
 
         String idusuario = firebaseAuth.getCurrentUser().getEmail();
         // agora conveter para base 64
         String emailconvertido = Base64Custom.codificar(idusuario);
-        DatabaseReference usuarioref = firebase.child("Usuarios").child(emailconvertido);
-        usuarioref.addValueEventListener(new ValueEventListener() {
+        usuarioref = firebase.child("Usuarios").child(emailconvertido);
+        Log.i("onplay","evento removido");
+        valueEventListenerUsuario=usuarioref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Usuario usuario=dataSnapshot.getValue(Usuario.class);
@@ -135,5 +147,11 @@ public class PrincipalActivity extends AppCompatActivity {
 
 
     }
-
+    // esse metodo é chamado quuando o usario fecha o app
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.i("onstop","evento removido");
+        usuarioref.removeEventListener(valueEventListenerUsuario);
+    }
 }

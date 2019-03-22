@@ -23,7 +23,6 @@ public class Movimentacao {
         // pegando o usuario atual
         String idusuario= Base64Custom.codificar(firebaseAuth.getCurrentUser().getEmail());
         DatabaseReference databaseReference = ConfigFirebase.getdatabase();
-        databaseReference.keepSynced(true);
 
         // movimentacao com um email criptografado, o mes o push id unico do firebase set value é ara salvar tudo
         String mesAno= DateUtil.removerbarra(data);

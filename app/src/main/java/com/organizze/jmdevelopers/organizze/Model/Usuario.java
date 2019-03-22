@@ -37,6 +37,7 @@ public class Usuario {
         DatabaseReference firebase=ConfigFirebase.getdatabase();
         firebase.child("Usuarios").child(this.idusuario).setValue(this);
     }
+
     @Exclude
     public String getIdusuario() {
         return idusuario;
