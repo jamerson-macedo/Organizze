@@ -47,7 +47,7 @@ public class MainActivity extends IntroActivity {
     }
     public void verificarusuariologado(){
         firebaseAuth=ConfigFirebase.getFirebaseAutenticacao();
-    firebaseAuth.signOut();
+
         // verifica se tem usuario
 
         if(firebaseAuth.getCurrentUser()!=null){

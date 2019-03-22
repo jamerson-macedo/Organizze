@@ -53,7 +53,7 @@ public class PrincipalActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         nome=findViewById(R.id.nome);
-        saldo=findViewById(R.id.saldo);
+        saldo=findViewById(R.id.quantidade);
         materialCalendarView=findViewById(R.id.calendar);
 
         toolbar.setTitle("Organizze");
