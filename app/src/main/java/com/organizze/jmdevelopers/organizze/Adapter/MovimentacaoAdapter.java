@@ -37,9 +37,10 @@ public class MovimentacaoAdapter extends RecyclerView.Adapter<MovimentacaoAdapte
         myViewHolder.titulo.setText(m.getDescricao());
         myViewHolder.categoria.setText(m.getCategoria());
         myViewHolder.valor.setText(String.valueOf(m.getValor()));
+        myViewHolder.valor.setTextColor(context.getResources().getColor(R.color.coloraccentreceita));
 
 /// verifica se é desesas se for ele mda a cor e acrescenta o -
-        if (m.getTipo() == "d" || m.getTipo().equals("d")) {
+        if (m.getTipo().equals("d")) {
             myViewHolder.valor.setTextColor(context.getResources().getColor(R.color.colorAccent));
             myViewHolder.valor.setText("-" + m.getValor());
         }

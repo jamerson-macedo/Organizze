@@ -25,7 +25,9 @@ public class Usuario {
     }
 
     public Double getDespesatotal()
+
     {
+
         return despesatotal;
     }
 
