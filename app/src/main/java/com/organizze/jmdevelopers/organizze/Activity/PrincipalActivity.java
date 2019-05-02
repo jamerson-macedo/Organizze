@@ -1,10 +1,12 @@
 package com.organizze.jmdevelopers.organizze.Activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -50,6 +53,7 @@ public class PrincipalActivity extends AppCompatActivity {
     private Double receitatotal = 0.0;
     private Double resumototal = 0.0;
     private DatabaseReference usuarioref;
+    private Movimentacao unicamovimentacao;
     private RecyclerView recyclerView;
     private MovimentacaoAdapter adapter;
     private ArrayList<Movimentacao> lista = new ArrayList<>();
@@ -93,12 +97,13 @@ public class PrincipalActivity extends AppCompatActivity {
         ItemTouchHelper.Callback itemtouch = new ItemTouchHelper.Callback() {
             @Override
             public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-                int dragflags=ItemTouchHelper.ACTION_STATE_IDLE;
-                int swipeflags=ItemTouchHelper.START | ItemTouchHelper.END;
-                return makeMovementFlags(dragflags,swipeflags);
-                        /// como vai ser o movimento
+                int dragflags = ItemTouchHelper.ACTION_STATE_IDLE;
+                int swipeflags = ItemTouchHelper.START | ItemTouchHelper.END;
+                return makeMovementFlags(dragflags, swipeflags);
+                /// como vai ser o movimento
             }
-                /// aqui voce pode mover o objeto na tela
+
+            /// aqui voce pode mover o objeto na tela
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder viewHolder1) {
                 return false;
@@ -106,13 +111,48 @@ public class PrincipalActivity extends AppCompatActivity {
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
-                Log.i("swipe","item arrastado");
-
+                Log.i("swipe", viewHolder + "item arrastado");
+                excluirmovimentacao(viewHolder);
             }
 
         };
         ///anexando ao recyclerview
         new ItemTouchHelper(itemtouch).attachToRecyclerView(recyclerView);
+    }
+
+    public void excluirmovimentacao(final RecyclerView.ViewHolder viewHolder) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("excluir movimentação da conta");
+        builder.setMessage("você tem certeza que deseja excluir essa movimentação ?");
+        builder.setCancelable(false);
+        builder.setPositiveButton("confirmar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                int position = viewHolder.getAdapterPosition();
+                // pega uma unica movimentacao da lista
+                unicamovimentacao = lista.get(position);
+                String idusuario = firebaseAuth.getCurrentUser().getEmail();
+                // agora conveter para base 64
+                String emailconvertido = Base64Custom.codificar(idusuario);
+                movimentacaoref = ConfigFirebase.getdatabase();
+                movimentacaoref = firebase.child("movimentacao").child(emailconvertido).child(mesAnoSelecionado);
+                // acessando o no que tem os dados de movimentacao
+                movimentacaoref.child(unicamovimentacao.getKey()).removeValue();
+                adapter.notifyItemRemoved(position);
+                atualizarsaldo();
+            }
+        });
+        builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(PrincipalActivity.this, "Cancelado", Toast.LENGTH_LONG).show();
+                adapter.notifyDataSetChanged();
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+
     }
 
     @Override
@@ -122,14 +162,37 @@ public class PrincipalActivity extends AppCompatActivity {
         recuperarresumo();
         recuperarmovimentacoes();
     }
+    public void atualizarsaldo(){
+        String idusuario = firebaseAuth.getCurrentUser().getEmail();
+        // agora conveter para base 64
+        String emailconvertido = Base64Custom.codificar(idusuario);
+        usuarioref = firebase.child("Usuarios").child(emailconvertido);
+
+        // pegando o usuario
+        if (unicamovimentacao.getTipo().equals("r")){
+
+            receitatotal=receitatotal-unicamovimentacao.getValor();
+            usuarioref.child("receitatotal").setValue(receitatotal);
+        }
+        if(unicamovimentacao.getTipo().equals("d")){
+           despesatotal=despesatotal-unicamovimentacao.getValor();
+            usuarioref.child("despesatotal").setValue(despesatotal);
+
+
+        }
+
+
+
+
+
+    }
 
     private void recuperarmovimentacoes() {
         // recperar o id
         String idusuario = firebaseAuth.getCurrentUser().getEmail();
         // agora conveter para base 64
         String emailconvertido = Base64Custom.codificar(idusuario);
-        Log.i("emaildocara", emailconvertido);
-        Log.i("iddocara", idusuario);
+
 
         movimentacaoref = ConfigFirebase.getdatabase();
         Log.i("movimentosdocara", "ola " + movimentacaoref.push());
@@ -145,7 +208,8 @@ public class PrincipalActivity extends AppCompatActivity {
                 /// qando iver varios filhos ai coloca o gettchildrem
                 for (DataSnapshot dados : dataSnapshot.getChildren()) {
                     Movimentacao mo = dados.getValue(Movimentacao.class);
-                    Log.i("OLAMUNDO", "todos os dados" + dados.getValue());
+                    // recuperando a chave da movimentacao
+                    mo.setKey(dados.getKey());
 
                     lista.add(mo);
                     Log.i("atual123", "veja : " + lista);
