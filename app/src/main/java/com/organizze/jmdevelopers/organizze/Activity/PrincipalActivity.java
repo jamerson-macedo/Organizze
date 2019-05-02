@@ -10,6 +10,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -83,8 +84,35 @@ public class PrincipalActivity extends AppCompatActivity {
         toolbar.setTitle("Organizze");
 
         configurarcalendario();
+        swipe();
 
 
+    }
+
+    public void swipe() {
+        ItemTouchHelper.Callback itemtouch = new ItemTouchHelper.Callback() {
+            @Override
+            public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
+                int dragflags=ItemTouchHelper.ACTION_STATE_IDLE;
+                int swipeflags=ItemTouchHelper.START | ItemTouchHelper.END;
+                return makeMovementFlags(dragflags,swipeflags);
+                        /// como vai ser o movimento
+            }
+                /// aqui voce pode mover o objeto na tela
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder viewHolder1) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+                Log.i("swipe","item arrastado");
+
+            }
+
+        };
+        ///anexando ao recyclerview
+        new ItemTouchHelper(itemtouch).attachToRecyclerView(recyclerView);
     }
 
     @Override
@@ -100,15 +128,15 @@ public class PrincipalActivity extends AppCompatActivity {
         String idusuario = firebaseAuth.getCurrentUser().getEmail();
         // agora conveter para base 64
         String emailconvertido = Base64Custom.codificar(idusuario);
-        Log.i("emaildocara",emailconvertido);
-        Log.i("iddocara",idusuario);
+        Log.i("emaildocara", emailconvertido);
+        Log.i("iddocara", idusuario);
 
         movimentacaoref = ConfigFirebase.getdatabase();
-        Log.i("movimentosdocara","ola " + movimentacaoref.push());
+        Log.i("movimentosdocara", "ola " + movimentacaoref.push());
 
-        movimentacaoref=firebase.child("movimentacao").child(emailconvertido).child(mesAnoSelecionado);
+        movimentacaoref = firebase.child("movimentacao").child(emailconvertido).child(mesAnoSelecionado);
 
-        Log.i("movimenacoes","no de movimenacoes " + movimentacaoref.toString());
+        Log.i("movimenacoes", "no de movimenacoes " + movimentacaoref.toString());
 
         valueEventListenerMovimentacao = movimentacaoref.addValueEventListener(new ValueEventListener() {
             @Override
@@ -116,11 +144,11 @@ public class PrincipalActivity extends AppCompatActivity {
                 lista.clear();
                 /// qando iver varios filhos ai coloca o gettchildrem
                 for (DataSnapshot dados : dataSnapshot.getChildren()) {
-                    Movimentacao mo=dados.getValue(Movimentacao.class);
-                    Log.i("OLAMUNDO","todos os dados"+ dados.getValue());
+                    Movimentacao mo = dados.getValue(Movimentacao.class);
+                    Log.i("OLAMUNDO", "todos os dados" + dados.getValue());
 
                     lista.add(mo);
-                    Log.i("atual123","veja : "+lista);
+                    Log.i("atual123", "veja : " + lista);
 
 
                 }
@@ -149,7 +177,7 @@ public class PrincipalActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Usuario usuario = dataSnapshot.getValue(Usuario.class);
-                Log.i("MMMMM",""+usuario.getDespesatotal());
+                Log.i("MMMMM", "" + usuario.getDespesatotal());
 
                 despesatotal = usuario.getDespesatotal();
                 receitatotal = usuario.getReceitatotal();
@@ -209,14 +237,14 @@ public class PrincipalActivity extends AppCompatActivity {
     public void configurarcalendario() {
         final CalendarDay data = materialCalendarView.getCurrentDate();
         /// 0 de valor ara ras e d de digio
-        String MesSelecionado=String.format("%02d",(data.getMonth() + 1));
+        String MesSelecionado = String.format("%02d", (data.getMonth() + 1));
         mesAnoSelecionado = String.valueOf(MesSelecionado + "" + data.getYear());
 
         materialCalendarView.setOnMonthChangedListener(new OnMonthChangedListener() {
             @Override
             public void onMonthChanged(MaterialCalendarView widget, CalendarDay date) {
-               String  MesSelecionado=String.format("%02d",(date.getMonth() + 1));
-                mesAnoSelecionado = (MesSelecionado )+ "" + date.getYear();
+                String MesSelecionado = String.format("%02d", (date.getMonth() + 1));
+                mesAnoSelecionado = (MesSelecionado) + "" + date.getYear();
                 movimentacaoref.removeEventListener(valueEventListenerMovimentacao);
                 recuperarmovimentacoes();
             }
